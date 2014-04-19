@@ -43,7 +43,7 @@ public class EditBeginListener implements Listener {
 		Sign sign = (Sign)state;
 		String[] lines = sign.getLines();
 		String signText = lines[0]+"\n"+lines[1]+"\n"+lines[2]+"\n"+lines[3];
-		book.setPages(signText);
+		book.setPages(signText,lines[0],lines[1],lines[2],lines[3]);
 		return book;
 	}
 }

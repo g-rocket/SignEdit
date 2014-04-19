@@ -43,20 +43,34 @@ public class EditEndListener implements Listener {
 	
 	public void writeToSign(BookMeta book, BlockState state, Player p){
 		Sign sign = (Sign)state;
-		String[] lines = book.getPages().get(0).split("\n");
+		String[] linesOnFirstPage = book.getPages().get(0).split("\n");
+		List<String> pages = book.getPages();
+		pages.subList(0, 1).clear();
+		String[] linesFromPages = pages.toArray(new String[4]);
+		String[] origLines = sign.getLines();
+		String[] finalLines = null;
+		if(Arrays.equals(origLines, linesOnFirstPage)) {
+			finalLines = linesFromPages;
+		} else if(Arrays.equals(origLines, linesFromPages)) {
+			finalLines = linesOnFirstPage;
+		} else {
+			p.sendMessage("You appear to have modified both representations of the sign's text");
+			p.sendMessage("Using the first page by default");
+		}
 		for(int i = 0; i < 4; i++){
-			if(i >= lines.length){
+			if(i >= finalLines.length){
 				sign.setLine(i, "");
 				continue;
 			}
-			sign.setLine(i, lines[i]);
+			sign.setLine(i, finalLines[i]);
 		}
 		sign.update(false, false);
 		Block block = sign.getBlock();
-		@SuppressWarnings("deprecation") // deprecated, but no equivalent method exists yet
+		@SuppressWarnings("deprecation") // deprecated, but no equivalent method seems to exist yet
 		org.bukkit.material.Sign data = new org.bukkit.material.Sign(block.getType(), block.getData());
 		BlockPlaceEvent fakeEvent = new BlockPlaceEvent(block, sign,
 				block.getRelative(data.getAttachedFace()), block.getDrops().iterator().next(), p, true);
 		plugin.getServer().getPluginManager().callEvent(fakeEvent); // tell plugins sign changed
+		sign.update();
 	}
 }

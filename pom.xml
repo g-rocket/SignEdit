@@ -4,6 +4,7 @@
   <groupId>net.clonecomputers.lab</groupId>
   <artifactId>SignEdit2</artifactId>
   <version>2.2</version>
+  <description>A bukkit plugin that allows you to edit signs with books</description>
 
   <repositories>
     <repository>
@@ -19,7 +20,7 @@
       <version>1.7.2-R0.3</version>
     </dependency>
   </dependencies>
-
+  
   <build>
     <sourceDirectory>src</sourceDirectory>
     <plugins>
